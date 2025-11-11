@@ -48,8 +48,7 @@
               const elemError = document.querySelector('#authError');
               const elemDebug = document.querySelector('#authDebug');
 
-              printDebug(
-                elemDebug,
+              console.log(
                 'Authentication Response (Autofill)',
                 JSON.stringify(asseResp, null, 2),
               );
@@ -63,8 +62,7 @@
               });
 
               const verificationJSON = await verificationResp.json();
-              printDebug(
-                elemDebug,
+              console.log(
                 'Server Response (Autofill)',
                 JSON.stringify(verificationJSON, null, 2),
               );
@@ -134,17 +132,6 @@
         event.preventDefault();
       }
 
-      /**
-       * A simple way to control how debug content is written to a debug console element
-       */
-      function printDebug(elemDebug, title, output) {
-        if (elemDebug.innerHTML !== '') {
-          elemDebug.innerHTML += '\n';
-        }
-        elemDebug.innerHTML += `// ${title}\n`;
-        elemDebug.innerHTML += `${output}\n`;
-      }
-
       // Hide the Begin button if the browser is incapable of using WebAuthn
       if (!browserSupportsWebAuthn()) {
         document.querySelector('.controls').style.display = 'none';
@@ -174,12 +161,12 @@
           try {
             const opts = await resp.json();
 
-            printDebug(elemDebug, 'Registration Options', JSON.stringify(opts, null, 2));
+            console.log('Registration Options', JSON.stringify(opts, null, 2));
 
             hideAuthForm();
 
             attResp = await startRegistration({ optionsJSON: opts });
-            printDebug(elemDebug, 'Registration Response', JSON.stringify(attResp, null, 2));
+            console.log('Registration Response', JSON.stringify(attResp, null, 2));
           } catch (error) {
             if (error.name === 'InvalidStateError') {
               elemError.innerText = 'Error: Authenticator was probably already registered by user';
@@ -199,7 +186,7 @@
           });
 
           const verificationJSON = await verificationResp.json();
-          printDebug(elemDebug, 'Server Response', JSON.stringify(verificationJSON, null, 2));
+          console.log('Server Response', JSON.stringify(verificationJSON, null, 2));
 
           if (verificationJSON && verificationJSON.verified) {
             elemSuccess.innerHTML = `Authenticator registered!`;
@@ -228,12 +215,12 @@
           let asseResp;
           try {
             const opts = await resp.json();
-            printDebug(elemDebug, 'Authentication Options', JSON.stringify(opts, null, 2));
+            console.log('Authentication Options', JSON.stringify(opts, null, 2));
 
             hideAuthForm();
 
             asseResp = await startAuthentication({ optionsJSON: opts });
-            printDebug(elemDebug, 'Authentication Response', JSON.stringify(asseResp, null, 2));
+            console.log('Authentication Response', JSON.stringify(asseResp, null, 2));
           } catch (error) {
             elemError.innerText = error;
             throw new Error(error);
@@ -248,7 +235,7 @@
           });
 
           const verificationJSON = await verificationResp.json();
-          printDebug(elemDebug, 'Server Response', JSON.stringify(verificationJSON, null, 2));
+          console.log('Server Response', JSON.stringify(verificationJSON, null, 2));
 
           if (verificationJSON && verificationJSON.verified) {
             elemSuccess.innerHTML = `User authenticated!`;
