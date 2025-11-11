@@ -4,10 +4,7 @@
  * The webpages served from ./public use @simplewebauthn/browser.
  */
 
-import https from 'https';
 import http from 'http';
-import fs from 'fs';
-
 import express from 'express';
 import session from 'express-session';
 import memoryStore from 'memorystore';
@@ -38,11 +35,10 @@ import { LoggedInUser } from './example-server';
 const app = express();
 const MemoryStore = memoryStore(session);
 
-const {
-  ENABLE_CONFORMANCE,
-  ENABLE_HTTPS,
-  RP_ID = 'localhost',
-} = process.env;
+const host = '127.0.0.1';
+const port = 8000;
+const expectedOrigin = `http://localhost:${port}`;
+const RP_ID = 'localhost';
 
 app.use(express.static('./public/'));
 app.use(express.json());
@@ -62,28 +58,10 @@ app.use(
 );
 
 /**
- * If the words "metadata statements" mean anything to you, you'll want to enable this route. It
- * contains an example of a more complex deployment of SimpleWebAuthn with support enabled for the
- * FIDO Metadata Service. This enables greater control over the types of authenticators that can
- * interact with the Rely Party (a.k.a. "RP", a.k.a. "this server").
- */
-if (ENABLE_CONFORMANCE === 'true') {
-  import('./fido-conformance').then(
-    ({ fidoRouteSuffix, fidoConformanceRouter }) => {
-      app.use(fidoRouteSuffix, fidoConformanceRouter);
-    },
-  );
-}
-
-/**
  * RP ID represents the "scope" of websites on which a credential should be usable. The Origin
  * represents the expected URL from which registration or authentication occurs.
  */
 export const rpID = RP_ID;
-// This value is set at the bottom of page as part of server initialization (the empty string is
-// to appease TypeScript until we determine the expected origin based on whether or not HTTPS
-// support is enabled)
-export let expectedOrigin = '';
 
 /**
  * 2FA and Passwordless WebAuthn flows expect you to be able to uniquely identify the user that
@@ -294,31 +272,6 @@ app.post('/verify-authentication', async (req, res) => {
   res.send({ verified });
 });
 
-if (ENABLE_HTTPS) {
-  const host = '0.0.0.0';
-  const port = 443;
-  expectedOrigin = `https://${rpID}`;
-
-  https
-    .createServer(
-      {
-        /**
-         * See the README on how to generate this SSL cert and key pair using mkcert
-         */
-        key: fs.readFileSync(`./${rpID}.key`),
-        cert: fs.readFileSync(`./${rpID}.crt`),
-      },
-      app,
-    )
-    .listen(port, host, () => {
-      console.log(`🚀 Server ready at ${expectedOrigin} (${host}:${port})`);
-    });
-} else {
-  const host = '127.0.0.1';
-  const port = 8000;
-  expectedOrigin = `http://localhost:${port}`;
-
-  http.createServer(app).listen(port, host, () => {
-    console.log(`🚀 Server ready at ${expectedOrigin} (${host}:${port})`);
-  });
-}
+http.createServer(app).listen(port, host, () => {
+  console.log(`🚀 Server ready at ${expectedOrigin} (${host}:${port})`);
+});
