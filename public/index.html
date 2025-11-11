@@ -36,7 +36,7 @@
        * to include this just before </body> as we'd typically do. And at that point we can
        * probably use async/await as well for more sane-looking code.
        */
-      fetch('/generate-authentication-options')
+      fetch('generate-authentication-options')
         .then(resp => resp.json())
         .then(opts => {
           console.log('Authentication Options (Autofill)', opts);
@@ -54,7 +54,7 @@
                 JSON.stringify(asseResp, null, 2),
               );
 
-              const verificationResp = await fetch('/verify-authentication', {
+              const verificationResp = await fetch('verify-authentication', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -168,7 +168,7 @@
           elemError.innerHTML = '';
           elemDebug.innerHTML = '';
 
-          const resp = await fetch('/generate-registration-options');
+          const resp = await fetch('generate-registration-options');
 
           let attResp;
           try {
@@ -190,7 +190,7 @@
             throw error;
           }
 
-          const verificationResp = await fetch('/verify-registration', {
+          const verificationResp = await fetch('verify-registration', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -223,7 +223,7 @@
           elemError.innerHTML = '';
           elemDebug.innerHTML = '';
 
-          const resp = await fetch('/generate-authentication-options');
+          const resp = await fetch('generate-authentication-options');
 
           let asseResp;
           try {
@@ -239,7 +239,7 @@
             throw new Error(error);
           }
 
-          const verificationResp = await fetch('/verify-authentication', {
+          const verificationResp = await fetch('verify-authentication', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
