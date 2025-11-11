@@ -21,11 +21,9 @@
         </section>
 
         <section id="authentication">
-          <form onsubmit="stopSubmit(event)">
-            <button id="btnAuthBegin">
-              <strong>Authenticate</strong>
-            </button>
-          </form>
+          <button id="btnAuthBegin">
+            <strong>Authenticate</strong>
+          </button>
           <p id="authSuccess" class="success"></p>
           <p id="authError" class="error"></p>
         </section>
@@ -35,10 +33,6 @@
     </div>
     <script>
       const { browserSupportsWebAuthn, startRegistration } = SimpleWebAuthnBrowser;
-
-      function stopSubmit(event) {
-        event.preventDefault();
-      }
 
       // Hide the Begin button if the browser is incapable of using WebAuthn
       if (!browserSupportsWebAuthn()) {
