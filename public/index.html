@@ -97,14 +97,6 @@
 
         <section id="authentication">
           <form onsubmit="stopSubmit(event)">
-            <section id="inputUsername">
-              <label for="username">Username</label>
-              <input type="text" name="username" autocomplete="username webauthn" autofocus />
-              <br />
-              <label for="password">Password</label>
-              <input type="password" name="password" autocomplete="current-password webauthn" />
-              <br />
-            </section>
             <button id="btnAuthBegin">
               <strong>🔐&nbsp;Authenticate</strong>
             </button>
@@ -129,10 +121,6 @@
         document.querySelector('.systemError').innerText =
           "It seems this browser doesn't support WebAuthn...";
       } else {
-        function hideAuthForm() {
-          document.getElementById('inputUsername').style.display = 'none';
-        }
-
         /**
          * Registration
          */
@@ -151,8 +139,6 @@
             const opts = await resp.json();
 
             console.log('Registration Options', JSON.stringify(opts, null, 2));
-
-            hideAuthForm();
 
             attResp = await startRegistration({ optionsJSON: opts });
             console.log('Registration Response', JSON.stringify(attResp, null, 2));
@@ -203,8 +189,6 @@
           try {
             const opts = await resp.json();
             console.log('Authentication Options', JSON.stringify(opts, null, 2));
-
-            hideAuthForm();
 
             asseResp = await startAuthentication({ optionsJSON: opts });
             console.log('Authentication Response', JSON.stringify(asseResp, null, 2));
