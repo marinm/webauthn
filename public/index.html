@@ -46,7 +46,6 @@
               // to interact with an input to choose a credential from the autofill
               const elemSuccess = document.querySelector('#authSuccess');
               const elemError = document.querySelector('#authError');
-              const elemDebug = document.querySelector('#authDebug');
 
               console.log(
                 'Authentication Response (Autofill)',
@@ -94,10 +93,6 @@
           </button>
           <p id="regSuccess" class="success"></p>
           <p id="regError" class="error"></p>
-          <details open>
-            <summary>Console</summary>
-            <textarea id="regDebug" spellcheck="false"></textarea>
-          </details>
         </section>
 
         <section id="authentication">
@@ -116,10 +111,6 @@
           </form>
           <p id="authSuccess" class="success"></p>
           <p id="authError" class="error"></p>
-          <details open>
-            <summary>Console</summary>
-            <textarea id="authDebug" spellcheck="false"></textarea>
-          </details>
         </section>
       </div>
 
@@ -148,12 +139,10 @@
         document.querySelector('#btnRegBegin').addEventListener('click', async () => {
           const elemSuccess = document.querySelector('#regSuccess');
           const elemError = document.querySelector('#regError');
-          const elemDebug = document.querySelector('#regDebug');
 
           // Reset success/error messages
           elemSuccess.innerHTML = '';
           elemError.innerHTML = '';
-          elemDebug.innerHTML = '';
 
           const resp = await fetch('generate-registration-options');
 
@@ -203,12 +192,10 @@
         document.querySelector('#btnAuthBegin').addEventListener('click', async () => {
           const elemSuccess = document.querySelector('#authSuccess');
           const elemError = document.querySelector('#authError');
-          const elemDebug = document.querySelector('#authDebug');
 
           // Reset success/error messages
           elemSuccess.innerHTML = '';
           elemError.innerHTML = '';
-          elemDebug.innerHTML = '';
 
           const resp = await fetch('generate-authentication-options');
 
