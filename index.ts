@@ -36,7 +36,7 @@ const app = express();
 const MemoryStore = memoryStore(session);
 
 const host = '127.0.0.1';
-const port = 8000;
+const port = 8005;
 const expectedOrigin = `http://localhost:${port}`;
 const RP_ID = 'localhost';
 
