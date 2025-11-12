@@ -1,6 +1,9 @@
-export const host = "127.0.0.1";
+/**
+ * If the server is behind a proxy, the internal host and port are different
+ * from the relying party ID and expected origin.
+ */
+export const host = "localhost";
 export const port = 8005;
-export const expectedOrigin = `http://localhost:${port}`;
 
 /**
  * RP ID represents the "scope" of websites on which a credential should be
@@ -8,3 +11,4 @@ export const expectedOrigin = `http://localhost:${port}`;
  * authentication occurs.
  */
 export const rpID = "localhost";
+export const expectedOrigin = `http://localhost:${port}`;
