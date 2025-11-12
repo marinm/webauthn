@@ -31,14 +31,10 @@ import {
 } from '@simplewebauthn/server';
 
 import { LoggedInUser } from './example-server';
+import { expectedOrigin, host, port, rpID } from './server/constants';
 
 const app = express();
 const MemoryStore = memoryStore(session);
-
-const host = '127.0.0.1';
-const port = 8005;
-const expectedOrigin = `http://localhost:${port}`;
-const RP_ID = 'localhost';
 
 app.use(express.static('./public/'));
 app.use(express.json());
@@ -56,12 +52,6 @@ app.use(
     }),
   }),
 );
-
-/**
- * RP ID represents the "scope" of websites on which a credential should be usable. The Origin
- * represents the expected URL from which registration or authentication occurs.
- */
-export const rpID = RP_ID;
 
 /**
  * 2FA and Passwordless WebAuthn flows expect you to be able to uniquely identify the user that
