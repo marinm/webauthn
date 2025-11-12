@@ -14,19 +14,9 @@ dotenv.config();
 
 import {
   AuthenticationResponseJSON,
-  // Authentication
-  generateAuthenticationOptions,
-  GenerateAuthenticationOptionsOpts,
-  // Registration
-  generateRegistrationOptions,
-  GenerateRegistrationOptionsOpts,
-  RegistrationResponseJSON,
   VerifiedAuthenticationResponse,
-  VerifiedRegistrationResponse,
   verifyAuthenticationResponse,
   VerifyAuthenticationResponseOpts,
-  verifyRegistrationResponse,
-  VerifyRegistrationResponseOpts,
   WebAuthnCredential,
 } from '@simplewebauthn/server';
 
@@ -34,6 +24,7 @@ import { expectedOrigin, host, port, rpID } from './server/constants';
 import { inMemoryUserDB, loggedInUserId } from './server/in-memory-user-db';
 import { GenerateRegistrationOptionsController } from './server/controllers/GenerateRegistrationOptionsController';
 import { VerifyRegistrationController } from './server/controllers/VerifyRegistrationController';
+import { GenerateAuthenticationOptionsController } from './server/controllers/GenerateAuthenticationOptions';
 
 const app = express();
 const MemoryStore = memoryStore(session);
@@ -59,39 +50,7 @@ app.get('/generate-registration-options', GenerateRegistrationOptionsController)
 
 app.post('/verify-registration', VerifyRegistrationController);
 
-/**
- * Login (a.k.a. "Authentication")
- */
-app.get('/generate-authentication-options', async (req, res) => {
-  // You need to know the user by this point
-  const user = inMemoryUserDB[loggedInUserId];
-
-  const opts: GenerateAuthenticationOptionsOpts = {
-    timeout: 60000,
-    allowCredentials: user.credentials.map((cred) => ({
-      id: cred.id,
-      type: 'public-key',
-      transports: cred.transports,
-    })),
-    /**
-     * Wondering why user verification isn't required? See here:
-     *
-     * https://passkeys.dev/docs/use-cases/bootstrapping/#a-note-about-user-verification
-     */
-    userVerification: 'preferred',
-    rpID,
-  };
-
-  const options = await generateAuthenticationOptions(opts);
-
-  /**
-   * The server needs to temporarily remember this value for verification, so don't lose it until
-   * after you verify the authentication response.
-   */
-  req.session.currentChallenge = options.challenge;
-
-  res.send(options);
-});
+app.get('/generate-authentication-options', GenerateAuthenticationOptionsController);
 
 app.post('/verify-authentication', async (req, res) => {
   const body: AuthenticationResponseJSON = req.body;
