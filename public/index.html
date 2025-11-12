@@ -1,83 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/@simplewebauthn/browser@11.0.0/dist/bundle/index.es5.umd.min.js"></script>
-    <script src="register.js"></script>
-    <script src="authenticate.js"></script>
-    <link rel="stylesheet" href="./styles.css" />
-    <title>SimpleWebAuthn Example Site</title>
-  </head>
-  <body>
-    <div class="container">
-      <h1>🔐</h1>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://unpkg.com/@simplewebauthn/browser@11.0.0/dist/bundle/index.es5.umd.min.js"></script>
+        <script src="register.js"></script>
+        <script src="authenticate.js"></script>
+        <link rel="stylesheet" href="./styles.css" />
+        <title>SimpleWebAuthn Example Site</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🔐</h1>
 
-      <div class="controls">
-        <section id="registration">
-          <button id="btnRegBegin">
-            <strong>Register</strong>
-          </button>
-          <p id="regSuccess" class="success"></p>
-          <p id="regError" class="error"></p>
-        </section>
+            <div class="controls">
+                <section id="registration">
+                    <button id="btnRegBegin">
+                        <strong>Register</strong>
+                    </button>
+                    <p id="regSuccess" class="success"></p>
+                    <p id="regError" class="error"></p>
+                </section>
 
-        <section id="authentication">
-          <button id="btnAuthBegin">
-            <strong>Authenticate</strong>
-          </button>
-          <p id="authSuccess" class="success"></p>
-          <p id="authError" class="error"></p>
-        </section>
-      </div>
+                <section id="authentication">
+                    <button id="btnAuthBegin">
+                        <strong>Authenticate</strong>
+                    </button>
+                    <p id="authSuccess" class="success"></p>
+                    <p id="authError" class="error"></p>
+                </section>
+            </div>
 
-      <p class="systemError"></p>
-    </div>
-    <script>
-      const { browserSupportsWebAuthn } = SimpleWebAuthnBrowser;
+            <p class="systemError"></p>
+        </div>
+        <script>
+            const { browserSupportsWebAuthn } = SimpleWebAuthnBrowser;
 
-      if (!browserSupportsWebAuthn()) {
-        document.querySelector('.controls').style.display = 'none';
-        document.querySelector('.systemError').innerText =
-          "It seems this browser doesn't support WebAuthn...";
-      } else {
-        document.querySelector('#btnRegBegin').addEventListener('click', tryRegister);
-        document.querySelector('#btnAuthBegin').addEventListener('click', tryAuthenticate);
-      }
+            if (!browserSupportsWebAuthn()) {
+                document.querySelector(".controls").style.display = "none";
+                document.querySelector(".systemError").innerText =
+                    "It seems this browser doesn't support WebAuthn...";
+            } else {
+                document
+                    .querySelector("#btnRegBegin")
+                    .addEventListener("click", tryRegister);
+                document
+                    .querySelector("#btnAuthBegin")
+                    .addEventListener("click", tryAuthenticate);
+            }
 
-      async function tryRegister() {
-        const elemSuccess = document.querySelector("#regSuccess");
-        const elemError = document.querySelector("#regError");
+            async function tryRegister() {
+                const elemSuccess = document.querySelector("#regSuccess");
+                const elemError = document.querySelector("#regError");
 
-        // Reset success/error messages
-        elemSuccess.innerHTML = "";
-        elemError.innerHTML = "";
+                // Reset success/error messages
+                elemSuccess.innerHTML = "";
+                elemError.innerHTML = "";
 
-        try {
-          await register();
-          elemSuccess.innerHTML = `Authenticator registered!`;
-        } catch (error) {
-          console.error(error);
-          elemError.innerText = error;
-        }
-      }
+                try {
+                    await register();
+                    elemSuccess.innerHTML = `Authenticator registered!`;
+                } catch (error) {
+                    console.error(error);
+                    elemError.innerText = error;
+                }
+            }
 
-      async function tryAuthenticate() {
-        const elemSuccess = document.querySelector("#authSuccess");
-        const elemError = document.querySelector("#authError");
+            async function tryAuthenticate() {
+                const elemSuccess = document.querySelector("#authSuccess");
+                const elemError = document.querySelector("#authError");
 
-        // Reset success/error messages
-        elemSuccess.innerHTML = "";
-        elemError.innerHTML = "";
+                // Reset success/error messages
+                elemSuccess.innerHTML = "";
+                elemError.innerHTML = "";
 
-        try {
-          await authenticate();
-          elemSuccess.innerHTML = `User authenticated!`;
-        } catch (error) {
-          console.error(error);
-          elemError.innerText = error;
-        }
-      }
-    </script>
-  </body>
+                try {
+                    await authenticate();
+                    elemSuccess.innerHTML = `User authenticated!`;
+                } catch (error) {
+                    console.error(error);
+                    elemError.innerText = error;
+                }
+            }
+        </script>
+    </body>
 </html>
