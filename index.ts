@@ -12,10 +12,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { host, port } from "./server/constants";
-import { GenerateRegistrationOptionsController } from "./server/controllers/GenerateRegistrationOptionsController";
-import { VerifyRegistrationController } from "./server/controllers/VerifyRegistrationController";
-import { GenerateAuthenticationOptionsController } from "./server/controllers/GenerateAuthenticationOptions";
-import { VerifyAuthenticationController } from "./server/controllers/VerifyAuthenticationController";
+import { GenerateRegistrationOptionsController } from "./server/controllers/generate-registration-options-controller";
+import { VerifyRegistrationController } from "./server/controllers/verify-registration-controller";
+import { GenerateAuthenticationOptionsController } from "./server/controllers/generate-authentication-options-controller";
+import { VerifyAuthenticationController } from "./server/controllers/verify-authentication-controller";
 import { setRequestUser } from "./server/set-request-user";
 
 const app = express();
