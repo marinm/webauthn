@@ -32,18 +32,18 @@ import type { WebAuthnCredential } from "@simplewebauthn/server";
  * generate an authentication response.
  */
 interface LoggedInUser {
-    id: string;
-    username: string;
-    credentials: WebAuthnCredential[];
+  id: string;
+  username: string;
+  credentials: WebAuthnCredential[];
 }
 
 declare module "express-session" {
-    interface SessionData {
-        /**
-         * A simple way of storing a user's current challenge being signed by registration or
-         * authentication. It should be expired after `timeout` milliseconds (optional argument for
-         * `generate` methods, defaults to 60000ms)
-         */
-        currentChallenge?: string;
-    }
+  interface SessionData {
+    /**
+     * A simple way of storing a user's current challenge being signed by registration or
+     * authentication. It should be expired after `timeout` milliseconds (optional argument for
+     * `generate` methods, defaults to 60000ms)
+     */
+    currentChallenge?: string;
+  }
 }

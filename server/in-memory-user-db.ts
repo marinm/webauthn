@@ -13,9 +13,9 @@ import { rpID } from "./constants";
 export const loggedInUserId = "internalUserId";
 
 export const inMemoryUserDB: { [loggedInUserId: string]: LoggedInUser } = {
-    [loggedInUserId]: {
-        id: loggedInUserId,
-        username: `user@${rpID}`,
-        credentials: [],
-    },
+  [loggedInUserId]: {
+    id: loggedInUserId,
+    username: `user@${rpID}`,
+    credentials: [],
+  },
 };

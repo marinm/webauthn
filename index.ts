@@ -24,32 +24,32 @@ const MemoryStore = memoryStore(session);
 app.use(express.static("./public/"));
 app.use(express.json());
 app.use(
-    session({
-        secret: "secret123",
-        saveUninitialized: true,
-        resave: false,
-        cookie: {
-            maxAge: 86400000,
-            httpOnly: true, // Ensure to not expose session cookies to clientside scripts
-        },
-        store: new MemoryStore({
-            checkPeriod: 86_400_000, // prune expired entries every 24h
-        }),
-    })
+  session({
+    secret: "secret123",
+    saveUninitialized: true,
+    resave: false,
+    cookie: {
+      maxAge: 86400000,
+      httpOnly: true, // Ensure to not expose session cookies to clientside scripts
+    },
+    store: new MemoryStore({
+      checkPeriod: 86_400_000, // prune expired entries every 24h
+    }),
+  }),
 );
 
 app.use(setRequestUser);
 
 app.get(
-    "/generate-registration-options",
-    GenerateRegistrationOptionsController
+  "/generate-registration-options",
+  GenerateRegistrationOptionsController,
 );
 
 app.post("/verify-registration", VerifyRegistrationController);
 
 app.get(
-    "/generate-authentication-options",
-    GenerateAuthenticationOptionsController
+  "/generate-authentication-options",
+  GenerateAuthenticationOptionsController,
 );
 
 app.post("/verify-authentication", VerifyAuthenticationController);
