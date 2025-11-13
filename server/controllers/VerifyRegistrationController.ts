@@ -6,12 +6,11 @@ import {
     VerifyRegistrationResponseOpts,
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
-import { inMemoryUserDB, loggedInUserId } from "../in-memory-user-db";
 
 export async function VerifyRegistrationController(req: any, res: any) {
     const body: RegistrationResponseJSON = req.body;
 
-    const user = inMemoryUserDB[loggedInUserId];
+    const user = req.user;
 
     const expectedChallenge = req.session.currentChallenge;
 
@@ -37,7 +36,7 @@ export async function VerifyRegistrationController(req: any, res: any) {
         const { credential } = registrationInfo;
 
         const existingCredential = user.credentials.find(
-            (cred) => cred.id === credential.id
+            (cred: WebAuthnCredential) => cred.id === credential.id
         );
 
         if (!existingCredential) {

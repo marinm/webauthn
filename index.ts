@@ -16,6 +16,7 @@ import { GenerateRegistrationOptionsController } from "./server/controllers/Gene
 import { VerifyRegistrationController } from "./server/controllers/VerifyRegistrationController";
 import { GenerateAuthenticationOptionsController } from "./server/controllers/GenerateAuthenticationOptions";
 import { VerifyAuthenticationController } from "./server/controllers/VerifyAuthenticationController";
+import { setRequestUser } from "./server/set-request-user";
 
 const app = express();
 const MemoryStore = memoryStore(session);
@@ -36,6 +37,8 @@ app.use(
         }),
     })
 );
+
+app.use(setRequestUser);
 
 app.get(
     "/generate-registration-options",

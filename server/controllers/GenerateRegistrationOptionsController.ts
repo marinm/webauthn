@@ -1,15 +1,15 @@
 import {
     generateRegistrationOptions,
     GenerateRegistrationOptionsOpts,
+    WebAuthnCredential,
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
-import { inMemoryUserDB, loggedInUserId } from "../in-memory-user-db";
 
 export async function GenerateRegistrationOptionsController(
     req: any,
     res: any
 ) {
-    const user = inMemoryUserDB[loggedInUserId];
+    const user = req.user;
 
     const {
         /**
@@ -31,7 +31,7 @@ export async function GenerateRegistrationOptionsController(
          * error in the browser if it's asked to perform registration when it recognizes one of the
          * credential ID's.
          */
-        excludeCredentials: credentials.map((cred) => ({
+        excludeCredentials: credentials.map((cred: WebAuthnCredential) => ({
             id: cred.id,
             type: "public-key",
             transports: cred.transports,

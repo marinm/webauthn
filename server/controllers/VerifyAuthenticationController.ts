@@ -6,12 +6,11 @@ import {
     WebAuthnCredential,
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
-import { inMemoryUserDB, loggedInUserId } from "../in-memory-user-db";
 
 export async function VerifyAuthenticationController(req: any, res: any) {
     const body: AuthenticationResponseJSON = req.body;
 
-    const user = inMemoryUserDB[loggedInUserId];
+    const user = req.user;
 
     const expectedChallenge = req.session.currentChallenge;
 
