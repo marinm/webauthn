@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import {
     generateAuthenticationOptions,
     GenerateAuthenticationOptionsOpts,
@@ -6,8 +7,8 @@ import {
 import { rpID } from "../constants";
 
 export async function GenerateAuthenticationOptionsController(
-    req: any,
-    res: any
+    req: Request,
+    res: Response
 ) {
     // You need to know the user by this point
     const user = req.user;

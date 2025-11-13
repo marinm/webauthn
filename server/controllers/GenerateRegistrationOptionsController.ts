@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import {
     generateRegistrationOptions,
     GenerateRegistrationOptionsOpts,
@@ -6,8 +7,8 @@ import {
 import { rpID } from "../constants";
 
 export async function GenerateRegistrationOptionsController(
-    req: any,
-    res: any
+    req: Request,
+    res: Response
 ) {
     const user = req.user;
 

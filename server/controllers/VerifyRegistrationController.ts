@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import {
     WebAuthnCredential,
     RegistrationResponseJSON,
@@ -7,7 +8,7 @@ import {
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
 
-export async function VerifyRegistrationController(req: any, res: any) {
+export async function VerifyRegistrationController(req: Request, res: Response) {
     const body: RegistrationResponseJSON = req.body;
 
     const user = req.user;

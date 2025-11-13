@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import {
     AuthenticationResponseJSON,
     VerifiedAuthenticationResponse,
@@ -7,7 +8,7 @@ import {
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
 
-export async function VerifyAuthenticationController(req: any, res: any) {
+export async function VerifyAuthenticationController(req: Request, res: Response) {
     const body: AuthenticationResponseJSON = req.body;
 
     const user = req.user;
