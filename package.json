@@ -17,7 +17,8 @@
     "dotenv": "^17.2.1",
     "express": "^4.21.2",
     "express-session": "^1.18.2",
-    "memorystore": "^1.6.7"
+    "memorystore": "^1.6.7",
+    "unique-username-generator": "^1.5.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
