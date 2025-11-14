@@ -8,6 +8,7 @@ import express from "express";
 import session from "express-session";
 import memoryStore from "memorystore";
 import dotenv from "dotenv";
+import { migrate } from "./server/database";
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ import { VerifyRegistrationController } from "./server/controllers/verify-regist
 import { GenerateAuthenticationOptionsController } from "./server/controllers/generate-authentication-options-controller";
 import { VerifyAuthenticationController } from "./server/controllers/verify-authentication-controller";
 import { setRequestUser } from "./server/set-request-user";
+
+migrate();
 
 const app = express();
 const MemoryStore = memoryStore(session);
