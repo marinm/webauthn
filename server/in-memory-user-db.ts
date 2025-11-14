@@ -1,5 +1,7 @@
 import { LoggedInUser } from "./example-server";
-import { rpID } from "./constants";
+import { animals } from "./usernames/animals";
+import { personalityTraits } from "./usernames/personality-traits";
+import { uniqueUsernameGenerator } from "unique-username-generator";
 
 /**
  * 2FA and Passwordless WebAuthn flows expect you to be able to uniquely
@@ -12,10 +14,17 @@ import { rpID } from "./constants";
  */
 export const loggedInUserId = "internalUserId";
 
+const username = uniqueUsernameGenerator({
+  dictionaries: [personalityTraits, animals],
+  separator: "-",
+  style: "kebabCase",
+  randomDigits: 0,
+});
+
 export const inMemoryUserDB: { [loggedInUserId: string]: LoggedInUser } = {
   [loggedInUserId]: {
     id: loggedInUserId,
-    username: `user@${rpID}`,
+    username: username,
     credentials: [],
   },
 };
