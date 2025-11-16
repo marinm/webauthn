@@ -4,13 +4,13 @@
  * The webpages served from ./public use @simplewebauthn/browser.
  */
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import express from "express";
 import session from "express-session";
 import memoryStore from "memorystore";
-import dotenv from "dotenv";
-import { migrate } from "./server/database";
-
-dotenv.config();
 
 import { host, port } from "./server/constants";
 import { GenerateRegistrationOptionsController } from "./server/controllers/generate-registration-options-controller";
@@ -19,7 +19,9 @@ import { GenerateAuthenticationOptionsController } from "./server/controllers/ge
 import { VerifyAuthenticationController } from "./server/controllers/verify-authentication-controller";
 import { setRequestUser } from "./server/set-request-user";
 
-migrate();
+import { testDrizzle } from "./server/db";
+
+testDrizzle();
 
 const app = express();
 const MemoryStore = memoryStore(session);
