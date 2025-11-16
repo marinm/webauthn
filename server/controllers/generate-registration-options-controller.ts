@@ -26,17 +26,7 @@ export async function GenerateRegistrationOptionsController(
     userName: username,
     timeout: 60000,
     attestationType: "none",
-    /**
-     * Passing in a user's list of already-registered credential IDs here prevents users from
-     * registering the same authenticator multiple times. The authenticator will simply throw an
-     * error in the browser if it's asked to perform registration when it recognizes one of the
-     * credential ID's.
-     */
-    excludeCredentials: credentials.map((cred: WebAuthnCredential) => ({
-      id: cred.id,
-      type: "public-key",
-      transports: cred.transports,
-    })),
+    excludeCredentials: [],
     authenticatorSelection: {
       residentKey: "discouraged",
       /**
