@@ -2,23 +2,22 @@ import { Request, Response } from "express";
 import {
   generateRegistrationOptions,
   GenerateRegistrationOptionsOpts,
-  WebAuthnCredential,
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
+import { animals } from "../usernames/animals";
+import { personalityTraits } from "../usernames/personality-traits";
+import { uniqueUsernameGenerator } from "unique-username-generator";
 
 export async function GenerateRegistrationOptionsController(
   req: Request,
   res: Response,
 ) {
-  const user = req.user;
-
-  const {
-    /**
-     * The username can be a human-readable name, email, etc... as it is intended only for display.
-     */
-    username,
-    credentials,
-  } = user;
+  const username = uniqueUsernameGenerator({
+    dictionaries: [personalityTraits, animals],
+    separator: "-",
+    style: "kebabCase",
+    randomDigits: 0,
+  });
 
   const opts: GenerateRegistrationOptionsOpts = {
     rpName: "SimpleWebAuthn Example",
