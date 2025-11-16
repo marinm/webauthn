@@ -12,9 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@libsql/client": "^0.15.15",
     "@simplewebauthn/server": "13.1.2",
     "better-sqlite3": "^12.4.1",
     "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
     "express": "^4.21.2",
     "express-session": "^1.18.2",
     "memorystore": "^1.6.7",
@@ -25,9 +27,11 @@
     "@types/express": "^4.17.25",
     "@types/express-session": "^1.17.5",
     "@types/node": "^20.11.20",
+    "drizzle-kit": "^0.31.7",
     "nodemon": "^3.1.7",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.1.6"
   }
 }
