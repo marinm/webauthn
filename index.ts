@@ -19,10 +19,6 @@ import { GenerateAuthenticationOptionsController } from "./server/controllers/ge
 import { VerifyAuthenticationController } from "./server/controllers/verify-authentication-controller";
 import { setRequestUser } from "./server/set-request-user";
 
-import { testDrizzle } from "./server/db";
-
-testDrizzle();
-
 const app = express();
 const MemoryStore = memoryStore(session);
 

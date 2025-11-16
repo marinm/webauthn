@@ -1,20 +1,20 @@
+import crypto from "crypto";
 import { Request, Response } from "express";
 import {
-  WebAuthnCredential,
   RegistrationResponseJSON,
   VerifiedRegistrationResponse,
   verifyRegistrationResponse,
   VerifyRegistrationResponseOpts,
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
+import db from "../db";
+import { passkeys } from "../db/schema/passkeys";
 
 export async function VerifyRegistrationController(
   req: Request,
   res: Response,
 ) {
   const body: RegistrationResponseJSON = req.body;
-
-  const user = req.user;
 
   const expectedChallenge = req.session.currentChallenge;
 
@@ -39,25 +39,17 @@ export async function VerifyRegistrationController(
   if (verified && registrationInfo) {
     const { credential } = registrationInfo;
 
-    const existingCredential = user.credentials.find(
-      (cred: WebAuthnCredential) => cred.id === credential.id,
-    );
-
-    if (!existingCredential) {
-      /**
-       * Add the returned credential to the user's list of credentials
-       */
-      const newCredential: WebAuthnCredential = {
-        id: credential.id,
-        publicKey: credential.publicKey,
-        counter: credential.counter,
-        transports: body.response.transports,
-      };
-      user.credentials.push(newCredential);
-    }
+    await db.insert(passkeys).values({
+      id: credential.id,
+      publicKey: credential.publicKey,
+      counter: credential.counter,
+      transports: JSON.stringify(body.response.transports),
+      displayName: "username",
+      userId: crypto.randomUUID(),
+    });
   }
 
-  req.session.currentChallenge = undefined;
+  delete req.session.currentChallenge;
 
   res.send({ verified });
 }
