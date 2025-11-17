@@ -1,3 +1,4 @@
+import "express-session";
 import type { WebAuthnCredential } from "@simplewebauthn/server";
 
 /**

@@ -1,4 +1,4 @@
-import { LoggedInUser } from "./example-server";
+import { LoggedInUser } from "./session";
 
 declare global {
   namespace Express {
