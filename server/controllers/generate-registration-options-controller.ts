@@ -7,7 +7,6 @@ import { rpID } from "../constants";
 import { animals } from "../usernames/animals";
 import { personalityTraits } from "../usernames/personality-traits";
 import { uniqueUsernameGenerator } from "unique-username-generator";
-import "../request";
 
 export async function GenerateRegistrationOptionsController(
   req: Request,
