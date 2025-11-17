@@ -13,10 +13,10 @@ import session from "express-session";
 import memoryStore from "memorystore";
 
 import { host, port } from "./constants";
-import { GenerateRegistrationOptionsController } from "./controllers/generate-registration-options-controller";
-import { VerifyRegistrationController } from "./controllers/verify-registration-controller";
-import { GenerateAuthenticationOptionsController } from "./controllers/generate-authentication-options-controller";
-import { VerifyAuthenticationController } from "./controllers/verify-authentication-controller";
+import { generateRegistrationOptionsController } from "./controllers/generateRegistrationOptionsController";
+import { verifyRegistrationController } from "./controllers/verifyRegistrationController";
+import { generateAuthenticationOptionsController } from "./controllers/generateAuthenticationOptionsController";
+import { verifyAuthenticationController } from "./controllers/verifyAuthenticationController";
 
 const app = express();
 const MemoryStore = memoryStore(session);
@@ -40,16 +40,16 @@ app.use(
 
 app.get(
   "/generate-registration-options",
-  GenerateRegistrationOptionsController,
+  generateRegistrationOptionsController,
 );
 
-app.post("/verify-registration", VerifyRegistrationController);
+app.post("/verify-registration", verifyRegistrationController);
 
 app.get(
   "/generate-authentication-options",
-  GenerateAuthenticationOptionsController,
+  generateAuthenticationOptionsController,
 );
 
-app.post("/verify-authentication", VerifyAuthenticationController);
+app.post("/verify-authentication", verifyAuthenticationController);
 
 app.listen(port, host, () => console.log(`🚀 Server ready at ${host}:${port}`));

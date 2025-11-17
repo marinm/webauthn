@@ -6,7 +6,7 @@ import {
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
 
-export async function GenerateAuthenticationOptionsController(
+export async function generateAuthenticationOptionsController(
   req: Request,
   res: Response,
 ) {

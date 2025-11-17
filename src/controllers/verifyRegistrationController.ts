@@ -10,7 +10,7 @@ import { expectedOrigin, rpID } from "../constants";
 import db from "../db";
 import { passkeys } from "../db/schema/passkeys";
 
-export async function VerifyRegistrationController(
+export async function verifyRegistrationController(
   req: Request,
   res: Response,
 ) {

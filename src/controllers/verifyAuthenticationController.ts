@@ -11,7 +11,7 @@ import { passkeys } from "../db/schema/passkeys";
 import { eq } from "drizzle-orm";
 import db from "../db";
 
-export async function VerifyAuthenticationController(
+export async function verifyAuthenticationController(
   req: Request,
   res: Response,
 ) {

@@ -5,10 +5,10 @@ import {
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
 import { animals } from "../usernames/animals";
-import { personalityTraits } from "../usernames/personality-traits";
+import { personalityTraits } from "../usernames/personalityTraits";
 import { uniqueUsernameGenerator } from "unique-username-generator";
 
-export async function GenerateRegistrationOptionsController(
+export async function generateRegistrationOptionsController(
   req: Request,
   res: Response,
 ) {
