@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { inMemoryUserDB, loggedInUserId } from "./in-memory-user-db";
 import "./request";
 
 export function setRequestUser(
@@ -7,6 +6,6 @@ export function setRequestUser(
   res: Response,
   next: NextFunction,
 ) {
-  req.user = inMemoryUserDB[loggedInUserId];
+  req.userId = null;
   next();
 }
