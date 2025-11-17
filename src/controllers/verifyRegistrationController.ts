@@ -7,8 +7,7 @@ import {
   VerifyRegistrationResponseOpts,
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
-import db from "../db";
-import { passkeys } from "../db/schema/passkeys";
+import { storePasskey } from "../db";
 
 export async function verifyRegistrationController(
   req: Request,
@@ -39,11 +38,11 @@ export async function verifyRegistrationController(
   if (verified && registrationInfo) {
     const { credential } = registrationInfo;
 
-    await db.insert(passkeys).values({
+    await storePasskey({
       id: credential.id,
       publicKey: credential.publicKey,
       counter: credential.counter,
-      transports: body.response.transports,
+      transports: body.response.transports ?? [],
       displayName: "username",
       userId: crypto.randomUUID(),
     });

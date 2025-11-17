@@ -7,9 +7,7 @@ import {
   WebAuthnCredential,
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
-import { passkeys } from "../db/schema/passkeys";
-import { eq } from "drizzle-orm";
-import db from "../db";
+import { getPasskey } from "../db";
 
 export async function verifyAuthenticationController(
   req: Request,
@@ -19,13 +17,7 @@ export async function verifyAuthenticationController(
 
   const expectedChallenge = req.session.currentChallenge;
 
-  const results = await db
-    .select()
-    .from(passkeys)
-    .where(eq(passkeys.id, body.id))
-    .limit(1);
-
-  const passkey = results[0] ?? null;
+  const passkey = await getPasskey(body.id);
 
   if (!passkey) {
     return res.status(400).send({
