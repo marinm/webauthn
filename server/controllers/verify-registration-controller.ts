@@ -43,7 +43,7 @@ export async function VerifyRegistrationController(
       id: credential.id,
       publicKey: credential.publicKey,
       counter: credential.counter,
-      transports: JSON.stringify(body.response.transports),
+      transports: body.response.transports,
       displayName: "username",
       userId: crypto.randomUUID(),
     });

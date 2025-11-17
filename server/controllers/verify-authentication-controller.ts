@@ -7,6 +7,9 @@ import {
   WebAuthnCredential,
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
+import { passkeys } from "../db/schema/passkeys";
+import { eq } from "drizzle-orm";
+import db from "../db";
 
 export async function VerifyAuthenticationController(
   req: Request,
@@ -14,24 +17,28 @@ export async function VerifyAuthenticationController(
 ) {
   const body: AuthenticationResponseJSON = req.body;
 
-  const user = req.user;
-
   const expectedChallenge = req.session.currentChallenge;
 
-  let dbCredential: WebAuthnCredential | undefined;
-  // "Query the DB" here for a credential matching `cred.id`
-  for (const cred of user.credentials) {
-    if (cred.id === body.id) {
-      dbCredential = cred;
-      break;
-    }
-  }
+  const results = await db
+    .select()
+    .from(passkeys)
+    .where(eq(passkeys.id, body.id))
+    .limit(1);
 
-  if (!dbCredential) {
+  const passkey = results[0] ?? null;
+
+  if (!passkey) {
     return res.status(400).send({
       error: "Authenticator is not registered with this site",
     });
   }
+
+  let dbCredential: WebAuthnCredential = {
+    id: passkey.id,
+    publicKey: Uint8Array.from(passkey.publicKey),
+    counter: passkey.counter,
+    transports: passkey.transports ?? undefined,
+  };
 
   let verification: VerifiedAuthenticationResponse;
   try {
