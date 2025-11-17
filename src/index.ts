@@ -12,11 +12,11 @@ import express from "express";
 import session from "express-session";
 import memoryStore from "memorystore";
 
-import { host, port } from "./server/constants";
-import { GenerateRegistrationOptionsController } from "./server/controllers/generate-registration-options-controller";
-import { VerifyRegistrationController } from "./server/controllers/verify-registration-controller";
-import { GenerateAuthenticationOptionsController } from "./server/controllers/generate-authentication-options-controller";
-import { VerifyAuthenticationController } from "./server/controllers/verify-authentication-controller";
+import { host, port } from "./constants";
+import { GenerateRegistrationOptionsController } from "./controllers/generate-registration-options-controller";
+import { VerifyRegistrationController } from "./controllers/verify-registration-controller";
+import { GenerateAuthenticationOptionsController } from "./controllers/generate-authentication-options-controller";
+import { VerifyAuthenticationController } from "./controllers/verify-authentication-controller";
 
 const app = express();
 const MemoryStore = memoryStore(session);
