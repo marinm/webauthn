@@ -4,7 +4,6 @@ import {
   GenerateRegistrationOptionsOpts,
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
-import { createUsername } from "../usernames";
 
 export async function generateRegistrationOptionsController(
   req: Request,
@@ -13,7 +12,7 @@ export async function generateRegistrationOptionsController(
   const opts: GenerateRegistrationOptionsOpts = {
     rpName: "SimpleWebAuthn Example",
     rpID,
-    userName: createUsername(),
+    userName: "username",
     timeout: 60000,
     attestationType: "none",
     excludeCredentials: [],
