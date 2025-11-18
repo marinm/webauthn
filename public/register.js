@@ -1,9 +1,7 @@
 const { startRegistration } = SimpleWebAuthnBrowser;
 
 async function register() {
-  const options = await fetch("generate-registration-options").then((options) =>
-    options.json(),
-  );
+  const options = await fetch("register").then((options) => options.json());
 
   let attestation;
   try {
@@ -14,7 +12,7 @@ async function register() {
       : error;
   }
 
-  const verification = await fetch("verify-registration", {
+  const verification = await fetch("register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

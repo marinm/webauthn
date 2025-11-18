@@ -7,18 +7,9 @@ import { verifyAuthenticationController } from "./controllers/verifyAuthenticati
 
 const router = express.Router();
 
-router.get(
-  "/generate-registration-options",
-  generateRegistrationOptionsController,
-);
-
-router.post("/verify-registration", verifyRegistrationController);
-
-router.get(
-  "/generate-authentication-options",
-  generateAuthenticationOptionsController,
-);
-
-router.post("/verify-authentication", verifyAuthenticationController);
+router.get("/register", generateRegistrationOptionsController);
+router.post("/register", verifyRegistrationController);
+router.get("/authenticate", generateAuthenticationOptionsController);
+router.post("/authenticate", verifyAuthenticationController);
 
 export default router;

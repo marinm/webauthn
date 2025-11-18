@@ -1,7 +1,7 @@
 const { startAuthentication } = SimpleWebAuthnBrowser;
 
 async function authenticate() {
-  const resp = await fetch("generate-authentication-options");
+  const resp = await fetch("authenticate");
 
   let asseResp;
   try {
@@ -11,7 +11,7 @@ async function authenticate() {
     throw new Error(error);
   }
 
-  const verificationResp = await fetch("verify-authentication", {
+  const verificationResp = await fetch("authenticate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
