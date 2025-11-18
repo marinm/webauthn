@@ -7,9 +7,7 @@ async function register() {
 
   let attestation;
   try {
-    console.log("Registration Options", JSON.stringify(options, null, 2));
     attestation = await startRegistration({ optionsJSON: options });
-    console.log("Registration Response", JSON.stringify(attestation, null, 2));
   } catch (error) {
     throw error.name === "InvalidStateError"
       ? new Error("Authenticator was probably already registered by user")
@@ -23,8 +21,6 @@ async function register() {
     },
     body: JSON.stringify(attestation),
   }).then((response) => response.json());
-
-  console.log("Server response", JSON.stringify(verification, null, 2));
 
   if (verification && verification.verified) {
     return true;
