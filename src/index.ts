@@ -12,6 +12,6 @@ const app = express();
 app.use(express.static("./public/"));
 
 app.use(session());
-app.use(routes);
+app.use(routes({}));
 
 app.listen(port, host, () => console.log(`🚀 Server ready at ${host}:${port}`));
