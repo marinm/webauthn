@@ -1,9 +1,9 @@
 import DatabaseConstructor, { Database } from "better-sqlite3";
 import { AuthenticatorTransportFuture } from "@simplewebauthn/server";
 
-const db: Database = new DatabaseConstructor(process.env.DB_FILE_NAME!);
+const database: Database = new DatabaseConstructor(process.env.DB_FILE_NAME!);
 
-db.exec(`
+database.exec(`
 	CREATE TABLE IF NOT EXISTS passkeys (
 		id TEXT PRIMARY KEY,
 		public_key BLOB NOT NULL,
@@ -33,7 +33,7 @@ export type Passkey = {
 };
 
 export async function getPasskey(id: string): Promise<Passkey | undefined> {
-  const row = await db
+  const row = await database
     .prepare<string, PasskeyRow>(`SELECT * FROM passkeys WHERE id = ?`)
     .get(id);
 
@@ -81,5 +81,5 @@ export async function storePasskey(passkey: Passkey): Promise<void> {
 		);
 	`;
 
-  await db.prepare(statement).run(row);
+  await database.prepare(statement).run(row);
 }

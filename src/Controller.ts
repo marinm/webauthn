@@ -16,7 +16,7 @@ import {
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "./constants";
 import crypto from "crypto";
-import { getPasskey, storePasskey } from "./db";
+import { getPasskey, storePasskey } from "./database";
 
 export class Controller {
   options: any;
