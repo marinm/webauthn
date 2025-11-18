@@ -5,10 +5,7 @@ import {
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
 
-export async function generateRegistrationOptionsController(
-  req: Request,
-  res: Response,
-) {
+export async function getRegistrationChallenge(req: Request, res: Response) {
   const opts: GenerateRegistrationOptionsOpts = {
     rpName: "SimpleWebAuthn Example",
     rpID,

@@ -1,15 +1,15 @@
 import express from "express";
 
-import { generateRegistrationOptionsController } from "./controllers/generateRegistrationOptionsController";
-import { verifyRegistrationController } from "./controllers/verifyRegistrationController";
-import { generateAuthenticationOptionsController } from "./controllers/generateAuthenticationOptionsController";
-import { verifyAuthenticationController } from "./controllers/verifyAuthenticationController";
+import { getRegistrationChallenge } from "./handlers/getRegistrationChallenge";
+import { register } from "./handlers/register";
+import { getAuthenticationChallenge } from "./handlers/getAuthenticationChallenge";
+import { authenticate } from "./handlers/authenticate";
 
 const router = express.Router();
 
-router.get("/register", generateRegistrationOptionsController);
-router.post("/register", verifyRegistrationController);
-router.get("/authenticate", generateAuthenticationOptionsController);
-router.post("/authenticate", verifyAuthenticationController);
+router.get("/register", getRegistrationChallenge);
+router.post("/register", register);
+router.get("/authenticate", getAuthenticationChallenge);
+router.post("/authenticate", authenticate);
 
 export default router;

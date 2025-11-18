@@ -6,10 +6,7 @@ import {
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
 
-export async function generateAuthenticationOptionsController(
-  req: Request,
-  res: Response,
-) {
+export async function getAuthenticationChallenge(req: Request, res: Response) {
   const opts: GenerateAuthenticationOptionsOpts = {
     timeout: 60000,
     allowCredentials: [],

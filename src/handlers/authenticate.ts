@@ -9,10 +9,7 @@ import {
 import { expectedOrigin, rpID } from "../constants";
 import { getPasskey } from "../db";
 
-export async function verifyAuthenticationController(
-  req: Request,
-  res: Response,
-) {
+export async function authenticate(req: Request, res: Response) {
   const body: AuthenticationResponseJSON = req.body;
 
   const expectedChallenge = req.session.currentChallenge;
