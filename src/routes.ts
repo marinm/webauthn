@@ -9,10 +9,10 @@ export default function (options?: any) {
 
   const controller = new Controller(options);
 
-  router.get("/register", controller.getRegistrationChallenge);
-  router.post("/register", controller.register);
-  router.get("/authenticate", controller.getAuthenticationChallenge);
-  router.post("/authenticate", controller.authenticate);
+  router.get("/register", controller.getRegistrationChallenge());
+  router.post("/register", controller.register());
+  router.get("/authenticate", controller.getAuthenticationChallenge());
+  router.post("/authenticate", controller.authenticate());
 
   return router;
 }

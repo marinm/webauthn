@@ -25,129 +25,137 @@ export class Controller {
     this.options = options;
   }
 
-  async getRegistrationChallenge(req: Request, res: Response) {
-    const opts: GenerateRegistrationOptionsOpts = {
-      rpName: "SimpleWebAuthn Example",
-      rpID,
-      userName: "username",
-      timeout: 60000,
-      attestationType: "none",
-      excludeCredentials: [],
-      authenticatorSelection: {
-        residentKey: "discouraged",
+  getRegistrationChallenge() {
+    return async (req: Request, res: Response) => {
+      const opts: GenerateRegistrationOptionsOpts = {
+        rpName: "SimpleWebAuthn Example",
+        rpID,
+        userName: "username",
+        timeout: 60000,
+        attestationType: "none",
+        excludeCredentials: [],
+        authenticatorSelection: {
+          residentKey: "discouraged",
+          userVerification: "preferred",
+        },
+        supportedAlgorithmIDs: [-7, -257],
+      };
+
+      const options = await generateRegistrationOptions(opts);
+
+      req.session.currentChallenge = options.challenge;
+
+      res.send(options);
+    };
+  }
+
+  register() {
+    return async (req: Request, res: Response) => {
+      const body: RegistrationResponseJSON = req.body;
+
+      const expectedChallenge = req.session.currentChallenge;
+
+      let verification: VerifiedRegistrationResponse;
+      try {
+        const opts: VerifyRegistrationResponseOpts = {
+          response: body,
+          expectedChallenge: `${expectedChallenge}`,
+          expectedOrigin,
+          expectedRPID: rpID,
+          requireUserVerification: false,
+        };
+        verification = await verifyRegistrationResponse(opts);
+      } catch (error) {
+        const _error = error as Error;
+        console.error(_error);
+        return res.status(400).send({ error: _error.message });
+      }
+
+      const { verified, registrationInfo } = verification;
+
+      if (verified && registrationInfo) {
+        const { credential } = registrationInfo;
+
+        await storePasskey({
+          id: credential.id,
+          publicKey: credential.publicKey,
+          counter: credential.counter,
+          transports: body.response.transports ?? [],
+          displayName: "username",
+          userId: crypto.randomUUID(),
+        });
+      }
+
+      delete req.session.currentChallenge;
+
+      res.send({ verified });
+    };
+  }
+
+  getAuthenticationChallenge() {
+    return async (req: Request, res: Response) => {
+      const opts: GenerateAuthenticationOptionsOpts = {
+        timeout: 60000,
+        allowCredentials: [],
         userVerification: "preferred",
-      },
-      supportedAlgorithmIDs: [-7, -257],
-    };
-
-    const options = await generateRegistrationOptions(opts);
-
-    req.session.currentChallenge = options.challenge;
-
-    res.send(options);
-  }
-
-  async register(req: Request, res: Response) {
-    const body: RegistrationResponseJSON = req.body;
-
-    const expectedChallenge = req.session.currentChallenge;
-
-    let verification: VerifiedRegistrationResponse;
-    try {
-      const opts: VerifyRegistrationResponseOpts = {
-        response: body,
-        expectedChallenge: `${expectedChallenge}`,
-        expectedOrigin,
-        expectedRPID: rpID,
-        requireUserVerification: false,
+        rpID,
       };
-      verification = await verifyRegistrationResponse(opts);
-    } catch (error) {
-      const _error = error as Error;
-      console.error(_error);
-      return res.status(400).send({ error: _error.message });
-    }
 
-    const { verified, registrationInfo } = verification;
+      const options = await generateAuthenticationOptions(opts);
 
-    if (verified && registrationInfo) {
-      const { credential } = registrationInfo;
+      req.session.currentChallenge = options.challenge;
 
-      await storePasskey({
-        id: credential.id,
-        publicKey: credential.publicKey,
-        counter: credential.counter,
-        transports: body.response.transports ?? [],
-        displayName: "username",
-        userId: crypto.randomUUID(),
-      });
-    }
-
-    delete req.session.currentChallenge;
-
-    res.send({ verified });
+      res.send(options);
+    };
   }
 
-  async getAuthenticationChallenge(req: Request, res: Response) {
-    const opts: GenerateAuthenticationOptionsOpts = {
-      timeout: 60000,
-      allowCredentials: [],
-      userVerification: "preferred",
-      rpID,
-    };
+  authenticate() {
+    return async (req: Request, res: Response) => {
+      const body: AuthenticationResponseJSON = req.body;
 
-    const options = await generateAuthenticationOptions(opts);
+      const expectedChallenge = req.session.currentChallenge;
 
-    req.session.currentChallenge = options.challenge;
+      const passkey = await getPasskey(body.id);
 
-    res.send(options);
-  }
+      if (!passkey) {
+        return res.status(400).send({
+          error: "Authenticator is not registered with this site",
+        });
+      }
 
-  async authenticate(req: Request, res: Response) {
-    const body: AuthenticationResponseJSON = req.body;
-
-    const expectedChallenge = req.session.currentChallenge;
-
-    const passkey = await getPasskey(body.id);
-
-    if (!passkey) {
-      return res.status(400).send({
-        error: "Authenticator is not registered with this site",
-      });
-    }
-
-    let dbCredential: WebAuthnCredential = {
-      id: passkey.id,
-      publicKey: Uint8Array.from(passkey.publicKey),
-      counter: passkey.counter,
-      transports: passkey.transports ?? undefined,
-    };
-
-    let verification: VerifiedAuthenticationResponse;
-    try {
-      const opts: VerifyAuthenticationResponseOpts = {
-        response: body,
-        expectedChallenge: `${expectedChallenge}`,
-        expectedOrigin,
-        expectedRPID: rpID,
-        credential: dbCredential,
-        requireUserVerification: false,
+      let dbCredential: WebAuthnCredential = {
+        id: passkey.id,
+        publicKey: Uint8Array.from(passkey.publicKey),
+        counter: passkey.counter,
+        transports: passkey.transports ?? undefined,
       };
-      verification = await verifyAuthenticationResponse(opts);
-    } catch (error) {
-      const _error = error as Error;
-      console.error(_error);
-      return res.status(400).send({ error: _error.message });
-    }
 
-    const { verified, authenticationInfo } = verification;
+      let verification: VerifiedAuthenticationResponse;
+      try {
+        const opts: VerifyAuthenticationResponseOpts = {
+          response: body,
+          expectedChallenge: `${expectedChallenge}`,
+          expectedOrigin,
+          expectedRPID: rpID,
+          credential: dbCredential,
+          requireUserVerification: false,
+        };
+        verification = await verifyAuthenticationResponse(opts);
+      } catch (error) {
+        const _error = error as Error;
+        console.error(_error);
+        return res.status(400).send({ error: _error.message });
+      }
 
-    if (verified) {
-      dbCredential.counter = authenticationInfo.newCounter;
-    }
+      const { verified, authenticationInfo } = verification;
 
-    req.session.currentChallenge = undefined;
+      if (verified) {
+        dbCredential.counter = authenticationInfo.newCounter;
+      }
 
-    res.send({ verified });
+      req.session.currentChallenge = undefined;
+
+      res.send({ verified });
+    };
   }
 }
