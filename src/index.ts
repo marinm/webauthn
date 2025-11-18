@@ -25,11 +25,8 @@ declare module "express-session" {
   }
 }
 
+import routes from "./routes";
 import { host, port } from "./constants";
-import { generateRegistrationOptionsController } from "./controllers/generateRegistrationOptionsController";
-import { verifyRegistrationController } from "./controllers/verifyRegistrationController";
-import { generateAuthenticationOptionsController } from "./controllers/generateAuthenticationOptionsController";
-import { verifyAuthenticationController } from "./controllers/verifyAuthenticationController";
 
 const app = express();
 const MemoryStore = memoryStore(session);
@@ -51,18 +48,6 @@ app.use(
   }),
 );
 
-app.get(
-  "/generate-registration-options",
-  generateRegistrationOptionsController,
-);
-
-app.post("/verify-registration", verifyRegistrationController);
-
-app.get(
-  "/generate-authentication-options",
-  generateAuthenticationOptionsController,
-);
-
-app.post("/verify-authentication", verifyAuthenticationController);
+app.use(routes);
 
 app.listen(port, host, () => console.log(`🚀 Server ready at ${host}:${port}`));
