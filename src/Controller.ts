@@ -14,14 +14,14 @@ import {
   VerifyRegistrationResponseOpts,
   WebAuthnCredential,
 } from "@simplewebauthn/server";
-import { expectedOrigin, rpID } from "./constants";
 import crypto from "crypto";
 import { getPasskey, storePasskey } from "./database";
+import { WebAuthnOptions } from "./WebAuthnOptions";
 
 export class Controller {
   options: any;
 
-  constructor(options?: any) {
+  constructor(options: WebAuthnOptions) {
     this.options = options;
   }
 
@@ -29,7 +29,7 @@ export class Controller {
     return async (req: Request, res: Response) => {
       const opts: GenerateRegistrationOptionsOpts = {
         rpName: "SimpleWebAuthn Example",
-        rpID,
+        rpID: this.options.rpID,
         userName: "username",
         timeout: 60000,
         attestationType: "none",
@@ -60,8 +60,8 @@ export class Controller {
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
           expectedChallenge: `${expectedChallenge}`,
-          expectedOrigin,
-          expectedRPID: rpID,
+          expectedOrigin: this.options.expectedOrigin,
+          expectedRPID: this.options.rpID,
           requireUserVerification: false,
         };
         verification = await verifyRegistrationResponse(opts);
@@ -98,7 +98,7 @@ export class Controller {
         timeout: 60000,
         allowCredentials: [],
         userVerification: "preferred",
-        rpID,
+        rpID: this.options.rpID,
       };
 
       const options = await generateAuthenticationOptions(opts);
@@ -135,8 +135,8 @@ export class Controller {
         const opts: VerifyAuthenticationResponseOpts = {
           response: body,
           expectedChallenge: `${expectedChallenge}`,
-          expectedOrigin,
-          expectedRPID: rpID,
+          expectedOrigin: this.options.expectedOrigin,
+          expectedRPID: this.options.rpID,
           credential: dbCredential,
           requireUserVerification: false,
         };

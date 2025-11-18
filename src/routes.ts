@@ -1,8 +1,9 @@
 import express from "express";
 
 import { Controller } from "./Controller";
+import { WebAuthnOptions } from "./WebAuthnOptions";
 
-export default function (options?: any) {
+export default function (options: WebAuthnOptions) {
   const router = express.Router();
 
   router.use(express.json());
