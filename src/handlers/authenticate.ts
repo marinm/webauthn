@@ -49,8 +49,6 @@ export async function authenticate(req: Request, res: Response) {
   const { verified, authenticationInfo } = verification;
 
   if (verified) {
-    // Update the credential's counter in the DB to the newest count in the
-    // authentication
     dbCredential.counter = authenticationInfo.newCounter;
   }
 

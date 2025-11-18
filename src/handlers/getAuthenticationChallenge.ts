@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import {
   generateAuthenticationOptions,
   GenerateAuthenticationOptionsOpts,
-  WebAuthnCredential,
 } from "@simplewebauthn/server";
 import { rpID } from "../constants";
 
