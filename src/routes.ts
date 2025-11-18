@@ -7,6 +7,8 @@ import { authenticate } from "./handlers/authenticate";
 
 const router = express.Router();
 
+router.use(express.json());
+
 router.get("/register", getRegistrationChallenge);
 router.post("/register", register);
 router.get("/authenticate", getAuthenticationChallenge);
