@@ -16,6 +16,7 @@ app.use(
   routes({
     rpID,
     expectedOrigin,
+    databaseFilepath: process.env.DB_FILE_NAME!,
   }),
 );
 

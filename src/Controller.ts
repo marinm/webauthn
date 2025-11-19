@@ -15,14 +15,16 @@ import {
   WebAuthnCredential,
 } from "@simplewebauthn/server";
 import crypto from "crypto";
-import { getPasskey, storePasskey } from "./database";
+import { PasskeyStore } from "./PasskeyStore";
 import { WebAuthnOptions } from "./WebAuthnOptions";
 
 export class Controller {
   options: any;
+  passkeyStore: PasskeyStore;
 
   constructor(options: WebAuthnOptions) {
     this.options = options;
+    this.passkeyStore = new PasskeyStore(options.databaseFilepath);
   }
 
   getRegistrationChallenge() {
@@ -76,7 +78,7 @@ export class Controller {
       if (verified && registrationInfo) {
         const { credential } = registrationInfo;
 
-        await storePasskey({
+        await this.passkeyStore.store({
           id: credential.id,
           publicKey: credential.publicKey,
           counter: credential.counter,
@@ -115,7 +117,7 @@ export class Controller {
 
       const expectedChallenge = req.session.currentChallenge;
 
-      const passkey = await getPasskey(body.id);
+      const passkey = await this.passkeyStore.get(body.id);
 
       if (!passkey) {
         return res.status(400).send({
