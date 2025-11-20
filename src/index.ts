@@ -27,8 +27,6 @@ const databaseFilepath = "./passkeys.sqlite";
 
 const app = express();
 
-app.use(express.static("./public/"));
-
 app.use(session());
 app.use(
   routes({
