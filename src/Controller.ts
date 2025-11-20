@@ -18,6 +18,8 @@ import crypto from "crypto";
 import { PasskeyStore } from "./PasskeyStore";
 import { WebAuthnOptions } from "./WebAuthnOptions";
 
+const MAX_CHALLENGE_AGE_MS = 60000;
+
 export class Controller {
   options: WebAuthnOptions;
   passkeyStore: PasskeyStore;
@@ -45,7 +47,8 @@ export class Controller {
 
       const options = await generateRegistrationOptions(opts);
 
-      req.session.currentChallenge = options.challenge;
+      req.session.webauthnChallenge = options.challenge;
+      req.session.webauthnChallengeCreatedAt = new Date();
 
       res.send(options);
     };
@@ -55,7 +58,14 @@ export class Controller {
     return async (req: Request, res: Response) => {
       const body: RegistrationResponseJSON = req.body;
 
-      const expectedChallenge = req.session.currentChallenge;
+      const createdAt =
+        req.session.webauthnChallengeCreatedAt?.valueOf() ?? Date.now();
+      const now = Date.now();
+      if (now - createdAt > MAX_CHALLENGE_AGE_MS) {
+        res.status(400).send();
+      }
+
+      const expectedChallenge = req.session.webauthnChallenge;
 
       let verification: VerifiedRegistrationResponse;
       try {
@@ -88,7 +98,8 @@ export class Controller {
         });
       }
 
-      delete req.session.currentChallenge;
+      req.session.webauthnChallenge = undefined;
+      req.session.webauthnChallengeCreatedAt = undefined;
 
       res.send({ verified });
     };
@@ -105,7 +116,8 @@ export class Controller {
 
       const options = await generateAuthenticationOptions(opts);
 
-      req.session.currentChallenge = options.challenge;
+      req.session.webauthnChallenge = options.challenge;
+      req.session.webauthnChallengeCreatedAt = new Date();
 
       res.send(options);
     };
@@ -115,7 +127,14 @@ export class Controller {
     return async (req: Request, res: Response) => {
       const body: AuthenticationResponseJSON = req.body;
 
-      const expectedChallenge = req.session.currentChallenge;
+      const createdAt =
+        req.session.webauthnChallengeCreatedAt?.valueOf() ?? Date.now();
+      const now = Date.now();
+      if (now - createdAt > MAX_CHALLENGE_AGE_MS) {
+        res.status(400).send();
+      }
+
+      const expectedChallenge = req.session.webauthnChallenge;
 
       const passkey = await this.passkeyStore.get(body.id);
 
@@ -155,7 +174,8 @@ export class Controller {
         dbCredential.counter = authenticationInfo.newCounter;
       }
 
-      req.session.currentChallenge = undefined;
+      req.session.webauthnChallenge = undefined;
+      req.session.webauthnChallengeCreatedAt = undefined;
 
       res.send({ verified });
     };
