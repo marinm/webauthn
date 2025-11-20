@@ -5,6 +5,7 @@ declare module "express-session" {
   interface SessionData {
     webauthnChallenge?: string;
     webauthnChallengeCreatedAt?: Date;
+    webauthUserId?: string;
   }
 }
 

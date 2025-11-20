@@ -88,14 +88,18 @@ export class Controller {
       if (verified && registrationInfo) {
         const { credential } = registrationInfo;
 
+        const newUserId = crypto.randomUUID();
+
         await this.passkeyStore.store({
           id: credential.id,
           publicKey: credential.publicKey,
           counter: credential.counter,
           transports: body.response.transports ?? [],
           displayName: "username",
-          userId: crypto.randomUUID(),
+          userId: newUserId,
         });
+
+        req.session.webauthUserId = newUserId;
       }
 
       req.session.webauthnChallenge = undefined;
@@ -172,6 +176,7 @@ export class Controller {
 
       if (verified) {
         dbCredential.counter = authenticationInfo.newCounter;
+        req.session.webauthUserId = passkey.userId;
       }
 
       req.session.webauthnChallenge = undefined;
