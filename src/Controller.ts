@@ -175,7 +175,7 @@ export class Controller {
       const { verified, authenticationInfo } = verification;
 
       if (verified) {
-        dbCredential.counter = authenticationInfo.newCounter;
+        this.passkeyStore.incrementCounter(passkey.id);
         req.session.webauthUserId = passkey.userId;
       }
 

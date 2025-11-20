@@ -88,4 +88,10 @@ export class PasskeyStore {
 
     await this.#database.prepare(statement).run(row);
   }
+
+  async incrementCounter(id: string): Promise<void> {
+    await this.#database
+      .prepare("UPDATE passkeys SET counter = counter + 1 WHERE id = ?")
+      .run([id]);
+  }
 }
