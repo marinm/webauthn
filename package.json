@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "build": "tsc",
-    "pretty": "prettier --write \"./**/*.{html,js,jsx,mjs,cjs,css,ts,tsx,json}\""
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

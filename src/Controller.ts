@@ -19,7 +19,7 @@ import { PasskeyStore } from "./PasskeyStore";
 import { WebAuthnOptions } from "./WebAuthnOptions";
 
 export class Controller {
-  options: any;
+  options: WebAuthnOptions;
   passkeyStore: PasskeyStore;
 
   constructor(options: WebAuthnOptions) {
